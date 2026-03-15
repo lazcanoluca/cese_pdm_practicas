@@ -89,6 +89,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  uint16_t delay = 200;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -100,7 +102,15 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  HAL_Delay(200);
+	  HAL_Delay(delay);
+
+	  if (!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)) {
+		  if (delay == 200) {
+			  delay = 500;
+		  } else {
+			  delay = 200;
+		  }
+	  }
   }
   /* USER CODE END 3 */
 }
