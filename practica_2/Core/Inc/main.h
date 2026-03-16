@@ -48,6 +48,13 @@ typedef struct {
   tick_t running;
 } delay_t;
 
+typedef struct {
+  const uint32_t *durations;
+  uint8_t durations_len;
+  uint8_t counter;
+  uint8_t position;
+} blink_pattern_t;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -79,6 +86,10 @@ bool_t delayRead(delay_t *delay);
  *
  */
 void delayWrite(delay_t *delay, tick_t duration);
+
+void blinkPatternInit(blink_pattern_t *bp, const uint32_t durations[], uint8_t durations_len);
+
+uint32_t blinkPatternStep(blink_pattern_t *bp);
 
 /* USER CODE END EFP */
 

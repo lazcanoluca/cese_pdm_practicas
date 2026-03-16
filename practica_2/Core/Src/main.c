@@ -76,6 +76,23 @@ bool_t delayRead(delay_t *delay) {
 
 void delayWrite(delay_t *delay, tick_t duration) { delay->duration = duration; }
 
+void blinkPatternInit(blink_pattern_t *bp, const uint32_t durations[], uint8_t durations_len) {
+  bp->durations = durations;
+  bp->durations_len = durations_len;
+  bp->counter = 0;
+  bp->position = 0;
+}
+
+uint32_t blinkPatternStep(blink_pattern_t *bp) {
+  bp->counter++;
+
+  if (bp->counter % 10 == 0) {
+    bp->position = (bp->position + 1) % bp->durations_len;
+  }
+
+  return bp->durations[bp->position];
+}
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -118,8 +135,8 @@ int main(void) {
   delay_t delay;
   delayInit(&delay, durations[0]);
 
-  uint8_t position = 0;
-  uint8_t counter = 0;
+  blink_pattern_t blink_pattern;
+  blinkPatternInit(&blink_pattern, durations, sizeof(durations) / sizeof(durations[0]));
 
   /* USER CODE END 2 */
 
@@ -132,12 +149,8 @@ int main(void) {
 
     if (delayRead(&delay)) {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-      counter++;
 
-      if (counter % 10 == 0) {
-        position++;
-        delayWrite(&delay, durations[position % 3]);
-      }
+      delayWrite(&delay, (tick_t)blinkPatternStep(&blink_pattern));
     }
   }
   /* USER CODE END 3 */
