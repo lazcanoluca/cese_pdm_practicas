@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdint.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -70,6 +69,7 @@ void delayInit(delay_t *delay, tick_t duration) {
     return;
   }
 
+  delay->startTime = 0;
   delay->duration = duration;
   delay->running = false;
 }
@@ -141,6 +141,7 @@ tick_t blinkPatternStep(blink_pattern_t *bp) {
   bp->high = true;
 
   // If the repeats counter has reached the number of repeats per step, move to the next position
+  // and pre-compute millis_high so it is ready for the immediately following ON phase.
   if (bp->counter % bp->repeats_per_step == 0) {
     bp->position = (bp->position + 1) % bp->durations_len;
 
