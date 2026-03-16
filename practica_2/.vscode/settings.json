@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "stm32cube-ide-clangd.enableFormatting": true,
+  "[c]": {
+    "editor.defaultFormatter": "stmicroelectronics.stm32cube-ide-clangd",
+    "editor.formatOnSave": true
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "stmicroelectronics.stm32cube-ide-clangd",
+    "editor.formatOnSave": true
+  }
+}
