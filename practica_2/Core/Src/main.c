@@ -66,6 +66,7 @@ bool_t delayRead(delay_t *delay) {
     return false;
   }
 
+  // If the delay is not running, start it and return false immediately
   if (!delay->running) {
     delay->startTime = HAL_GetTick();
     delay->running = true;
@@ -73,6 +74,7 @@ bool_t delayRead(delay_t *delay) {
     return false;
   }
 
+  // If the delay is running, check if the duration has elapsed
   if (HAL_GetTick() - delay->startTime >= delay->duration) {
     delay->running = false;
 
@@ -105,6 +107,7 @@ void blinkPatternInit(blink_pattern_t *bp, const tick_t durations[], uint8_t dur
   bp->counter = 0;
   bp->position = 0;
   bp->high = false;
+  // Calculate the initial high time based on the first duration and duty cycle
   bp->millis_high = (durations[0] * duty_cycle) / 100u;
 }
 
@@ -113,18 +116,22 @@ tick_t blinkPatternStep(blink_pattern_t *bp) {
     return 0;
   }
 
+  // If the output is currently high, return the low time
   if (bp->high) {
     bp->high = false;
 
     return bp->durations[bp->position] - bp->millis_high;
   }
 
+  // The output is low, switch to high and increment the repeats counter
   bp->counter++;
   bp->high = true;
 
+  // If the repeats counter has reached the number of repeats per step, move to the next position
   if (bp->counter % bp->repeats_per_step == 0) {
     bp->position = (bp->position + 1) % bp->durations_len;
 
+    // Calculate the high time for the new position based on the duty cycle
     tick_t duration = bp->durations[bp->position];
     bp->millis_high = (duration * bp->duty_cycle) / 100u;
   }
