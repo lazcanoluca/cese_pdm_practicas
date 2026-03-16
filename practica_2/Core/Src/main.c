@@ -32,6 +32,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+#define BLINK_REPEATS_PER_STEP 5U
+#define BLINK_DUTY_CYCLE_PCT 50U
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,6 +47,15 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+
+/* Blink period sequence in ms. Each entry is held for BLINK_REPEATS_PER_STEP full cycles
+ * before advancing to the next. Add or remove entries freely (the length is computed
+ * automatically). */
+static const tick_t blink_durations[] = {
+    1000,
+    200,
+    100,
+};
 
 /* USER CODE END PV */
 
@@ -176,13 +189,13 @@ int main(void) {
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  const tick_t durations[] = {1000, 200, 100};
-
   delay_t delay;
-  delayInit(&delay, durations[0]);
+  delayInit(&delay, blink_durations[0]);
 
   blink_pattern_t blink_pattern;
-  blinkPatternInit(&blink_pattern, durations, sizeof(durations) / sizeof(durations[0]), 5, 50);
+  blinkPatternInit(&blink_pattern, blink_durations,
+                   sizeof(blink_durations) / sizeof(blink_durations[0]), BLINK_REPEATS_PER_STEP,
+                   BLINK_DUTY_CYCLE_PCT);
 
   /* USER CODE END 2 */
 
