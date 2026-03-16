@@ -53,11 +53,19 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 void delayInit(delay_t *delay, tick_t duration) {
+  if (delay == NULL || duration == 0) {
+    return;
+  }
+
   delay->duration = duration;
   delay->running = false;
 }
 
 bool_t delayRead(delay_t *delay) {
+  if (delay == NULL) {
+    return false;
+  }
+
   if (!delay->running) {
     delay->startTime = HAL_GetTick();
     delay->running = true;
@@ -74,10 +82,21 @@ bool_t delayRead(delay_t *delay) {
   return false;
 }
 
-void delayWrite(delay_t *delay, tick_t duration) { delay->duration = duration; }
+void delayWrite(delay_t *delay, tick_t duration) {
+  if (delay == NULL || duration == 0) {
+    return;
+  }
+
+  delay->duration = duration;
+}
 
 void blinkPatternInit(blink_pattern_t *bp, const tick_t durations[], uint8_t durations_len,
                       uint8_t repeats_per_step, uint8_t duty_cycle) {
+
+  if (bp == NULL || durations == NULL || durations_len == 0 || duty_cycle > 100 ||
+      repeats_per_step == 0) {
+    return;
+  }
 
   bp->durations = durations;
   bp->durations_len = durations_len;
@@ -90,6 +109,10 @@ void blinkPatternInit(blink_pattern_t *bp, const tick_t durations[], uint8_t dur
 }
 
 tick_t blinkPatternStep(blink_pattern_t *bp) {
+  if (bp == NULL) {
+    return 0;
+  }
+
   if (bp->high) {
     bp->high = false;
 
