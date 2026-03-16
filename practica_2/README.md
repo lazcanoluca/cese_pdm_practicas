@@ -1,5 +1,7 @@
 # Práctica 2
 
+**Alumno: Luca Lazcano**
+
 Esta práctica implementa dos bloques principales:
 
 - Un módulo de **delay no bloqueante** basado en `HAL_GetTick()`.
