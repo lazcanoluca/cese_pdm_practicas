@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdint.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -112,8 +113,13 @@ int main(void) {
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  tick_t durations[] = {1000 / 2, 200 / 2, 100 / 2};
+
   delay_t delay;
-  delayInit(&delay, 100);
+  delayInit(&delay, durations[0]);
+
+  uint8_t position = 0;
+  uint8_t counter = 0;
 
   /* USER CODE END 2 */
 
@@ -126,6 +132,12 @@ int main(void) {
 
     if (delayRead(&delay)) {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+      counter++;
+
+      if (counter % 10 == 0) {
+        position++;
+        delayWrite(&delay, durations[position % 3]);
+      }
     }
   }
   /* USER CODE END 3 */
