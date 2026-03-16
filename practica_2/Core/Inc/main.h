@@ -45,7 +45,7 @@ typedef bool bool_t;
 typedef struct {
   tick_t startTime;
   tick_t duration;
-  tick_t running;
+  bool_t running;
 } delay_t;
 
 typedef struct {
