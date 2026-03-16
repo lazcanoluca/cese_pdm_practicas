@@ -76,21 +76,37 @@ bool_t delayRead(delay_t *delay) {
 
 void delayWrite(delay_t *delay, tick_t duration) { delay->duration = duration; }
 
-void blinkPatternInit(blink_pattern_t *bp, const uint32_t durations[], uint8_t durations_len) {
+void blinkPatternInit(blink_pattern_t *bp, const tick_t durations[], uint8_t durations_len,
+                      uint8_t repeats_per_step, uint8_t duty_cycle) {
+
   bp->durations = durations;
   bp->durations_len = durations_len;
+  bp->repeats_per_step = repeats_per_step;
+  bp->duty_cycle = duty_cycle;
   bp->counter = 0;
   bp->position = 0;
+  bp->high = false;
+  bp->millis_high = (durations[0] * duty_cycle) / 100u;
 }
 
-uint32_t blinkPatternStep(blink_pattern_t *bp) {
-  bp->counter++;
+tick_t blinkPatternStep(blink_pattern_t *bp) {
+  if (bp->high) {
+    bp->high = false;
 
-  if (bp->counter % 10 == 0) {
-    bp->position = (bp->position + 1) % bp->durations_len;
+    return bp->durations[bp->position] - bp->millis_high;
   }
 
-  return bp->durations[bp->position];
+  bp->counter++;
+  bp->high = true;
+
+  if (bp->counter % bp->repeats_per_step == 0) {
+    bp->position = (bp->position + 1) % bp->durations_len;
+
+    tick_t duration = bp->durations[bp->position];
+    bp->millis_high = (duration * bp->duty_cycle) / 100u;
+  }
+
+  return bp->millis_high;
 }
 
 /* USER CODE END PFP */
@@ -130,13 +146,13 @@ int main(void) {
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  tick_t durations[] = {1000 / 2, 200 / 2, 100 / 2};
+  const tick_t durations[] = {1000, 200, 100};
 
   delay_t delay;
   delayInit(&delay, durations[0]);
 
   blink_pattern_t blink_pattern;
-  blinkPatternInit(&blink_pattern, durations, sizeof(durations) / sizeof(durations[0]));
+  blinkPatternInit(&blink_pattern, durations, sizeof(durations) / sizeof(durations[0]), 5, 50);
 
   /* USER CODE END 2 */
 
@@ -150,7 +166,7 @@ int main(void) {
     if (delayRead(&delay)) {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
-      delayWrite(&delay, (tick_t)blinkPatternStep(&blink_pattern));
+      delayWrite(&delay, blinkPatternStep(&blink_pattern));
     }
   }
   /* USER CODE END 3 */
