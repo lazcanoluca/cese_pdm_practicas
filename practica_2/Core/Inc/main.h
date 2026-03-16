@@ -77,28 +77,51 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 
 /**
- *
+ * @brief Initializes a non-blocking delay.
+ * @param delay Pointer to the delay structure.
+ * @param duration Delay duration in ticks.
  */
 void delayInit(delay_t *delay, tick_t duration);
 
 /**
- *
+ * @brief Checks whether the delay has expired.
+ * @param delay Pointer to the delay structure.
+ * @retval true The configured duration has elapsed.
+ * @retval false The configured duration has not elapsed yet.
  */
 bool_t delayRead(delay_t *delay);
 
 /**
- *
+ * @brief Updates the delay duration.
+ * @param delay Pointer to the delay structure.
+ * @param duration New delay duration in ticks.
  */
 void delayWrite(delay_t *delay, tick_t duration);
 
 /**
- *
+ * @brief Initializes the blink pattern generator.
+ * @param bp Pointer to the pattern structure.
+ * @param durations Array of base periods in ticks.
+ * @param durations_len Number of elements in @p durations.
+ * @param repeats_per_step Number of repeats for each period.
+ * @param duty_cycle Duty cycle percentage (0..100).
+ * @code
+ * const tick_t durations[] = {1000, 1500, 500};
+ * blink_pattern_t blink_pattern;
+ * blinkPatternInit(&blink_pattern,
+ *                  durations,
+ *                  sizeof(durations) / sizeof(durations[0]),
+ *                  5,
+ *                  50);
+ * @endcode
  */
 void blinkPatternInit(blink_pattern_t *bp, const tick_t durations[], uint8_t durations_len,
                       uint8_t repeats_per_step, uint8_t duty_cycle);
 
 /**
- *
+ * @brief Advances one pattern step and returns the next wait time.
+ * @param bp Pointer to the pattern structure.
+ * @return Time in ticks until the next state change.
  */
 tick_t blinkPatternStep(blink_pattern_t *bp);
 
