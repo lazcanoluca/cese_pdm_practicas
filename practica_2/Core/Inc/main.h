@@ -80,6 +80,7 @@ void Error_Handler(void);
  * @brief Initializes a non-blocking delay.
  * @param delay Pointer to the delay structure.
  * @param duration Delay duration in ticks.
+ * @note Does nothing if @p delay is NULL or @p duration is 0.
  */
 void delayInit(delay_t *delay, tick_t duration);
 
@@ -88,6 +89,7 @@ void delayInit(delay_t *delay, tick_t duration);
  * @param delay Pointer to the delay structure.
  * @retval true The configured duration has elapsed.
  * @retval false The configured duration has not elapsed yet.
+ * @note Returns false immediately if @p delay is NULL.
  */
 bool_t delayRead(delay_t *delay);
 
@@ -95,6 +97,7 @@ bool_t delayRead(delay_t *delay);
  * @brief Updates the delay duration.
  * @param delay Pointer to the delay structure.
  * @param duration New delay duration in ticks.
+ * @note Does nothing if @p delay is NULL or @p duration is 0.
  */
 void delayWrite(delay_t *delay, tick_t duration);
 
