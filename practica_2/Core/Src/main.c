@@ -51,6 +51,30 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
+void delayInit(delay_t *delay, tick_t duration) {
+  delay->duration = duration;
+  delay->running = false;
+}
+
+bool_t delayRead(delay_t *delay) {
+  if (!delay->running) {
+    delay->startTime = HAL_GetTick();
+    delay->running = true;
+
+    return false;
+  }
+
+  if (HAL_GetTick() - delay->startTime >= delay->duration) {
+    delay->running = false;
+
+    return true;
+  }
+
+  return false;
+}
+
+void delayWrite(delay_t *delay, tick_t duration) { delay->duration = duration; }
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -89,6 +113,7 @@ int main(void) {
   /* USER CODE BEGIN 2 */
 
   delay_t delay;
+  delayInit(&delay, 100);
 
   /* USER CODE END 2 */
 
@@ -99,15 +124,8 @@ int main(void) {
 
     /* USER CODE BEGIN 3 */
 
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    HAL_Delay(delay);
-
-    if (!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)) {
-      if (delay == 200) {
-        delay = 500;
-      } else {
-        delay = 200;
-      }
+    if (delayRead(&delay)) {
+      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     }
   }
   /* USER CODE END 3 */
