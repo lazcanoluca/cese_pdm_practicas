@@ -47,4 +47,13 @@ bool_t delayRead(delay_t *delay);
  */
 void delayWrite(delay_t *delay, tick_t duration);
 
+/**
+ * @brief Checks if the delay is running.
+ * @param delay Pointer to the delay structure.
+ * @retval true The delay is running.
+ * @retval false the delay is not running.
+ * @note Returns false immediately if @p delay is NULL.
+ */
+bool_t delayIsRunning(delay_t * delay);
+
 #endif /* DELAY_INC_DELAY_H_ */

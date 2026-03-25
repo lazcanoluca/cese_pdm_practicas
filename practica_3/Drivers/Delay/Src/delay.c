@@ -48,3 +48,11 @@ void delayWrite(delay_t *delay, tick_t duration) {
 
   delay->duration = duration;
 }
+
+bool_t delayIsRunning(delay_t * delay) {
+  if (delay == NULL) {
+    return false;
+  }
+
+  return delay->running;
+}
