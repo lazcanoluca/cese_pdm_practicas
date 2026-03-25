@@ -1,11 +1,13 @@
-# Práctica 2
+# Práctica 3
 
 **Alumno: Luca Lazcano**
 
-Esta práctica implementa dos bloques principales:
+Esta práctica construye sobre lo implementado en la práctica 2 (ver [](./../practica_2/README.md)). Implementa dos bloques principales:
 
 - Un módulo de **delay no bloqueante** basado en `HAL_GetTick()`.
 - Un módulo de **blink pattern** para generar secuencias de parpadeo configurables.
+
+Lo nuevo en esta práctica es que se modulariza la funcionalidad del delay y se agrega algo de funcionalidad.
 
 ## Módulo `delay`
 
@@ -16,6 +18,7 @@ Permitir temporizaciones sin frenar el `while(1)`, para mantener la lógica reac
 - `delayInit(delay_t *delay, tick_t duration)`: inicializa la estructura y duración base.
 - `delayRead(delay_t *delay)`: consulta si venció el tiempo configurado.
 - `delayWrite(delay_t *delay, tick_t duration)`: actualiza la duración para el próximo ciclo.
+- `delayIsRunning(delay_t *delay)`: verifica si el delay está corriendo.
 
 ### Cómo funciona internamente
 `delayRead()` opera como una pequeña máquina de estados:
@@ -40,11 +43,12 @@ Generar un patrón de blink con:
 - `blinkPatternStep(...)`: avanza la lógica del patrón y devuelve el próximo tiempo de espera (`tick_t`).
 
 ### Cómo funciona internamente
-El módulo mantiene estado interno (`position`, `counter`, `high`, `millis_high`):
+El módulo mantiene estado interno (`position`, `counter`, `high`, `millis_high`). Cada vez que se ejecuta un "paso", mediante el llamado a `blinkPatternStep()`, se actualiza el estado para que:
 
 - Si estaba en alto, pasa a bajo y devuelve el tiempo bajo restante del período actual.
 - Si estaba en bajo, pasa a alto, incrementa contador y devuelve `millis_high`.
 - Cada `repeats_per_step`, avanza a la siguiente duración del arreglo (cíclicamente).
 
+## Programa en `main`
 En el `main`, el valor retornado por `blinkPatternStep()` se carga en `delayWrite()`, logrando un parpadeo configurable sin bloqueos.
 
