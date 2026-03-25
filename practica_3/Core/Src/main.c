@@ -33,7 +33,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define BLINK_REPEATS_PER_STEP 5U
+#define BLINK_REPEATS_PER_STEP 1U
 #define BLINK_DUTY_CYCLE_PCT 50U
 
 /* USER CODE END PD */
@@ -52,9 +52,10 @@ UART_HandleTypeDef huart2;
  * before advancing to the next. Add or remove entries freely (the length is computed
  * automatically). */
 static const tick_t blink_durations[] = {
-    1000,
-    200,
-    100,
+    500 * 2,
+    100 * 2,
+    100 * 2,
+    1000 * 2
 };
 
 /* USER CODE END PV */
