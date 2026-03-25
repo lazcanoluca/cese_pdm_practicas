@@ -171,7 +171,8 @@ int main(void) {
     if (delayRead(&delay)) {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
-      delayWrite(&delay, blinkPatternStep(&blink_pattern));
+      if (!delayIsRunning(&delay))
+        delayWrite(&delay, blinkPatternStep(&blink_pattern));
     }
   }
   /* USER CODE END 3 */
