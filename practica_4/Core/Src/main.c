@@ -110,11 +110,10 @@ int main(void) {
     /* USER CODE BEGIN 3 */
 	debounceUpdate();
 
-	if (buttonIsPressed()) {
+	if (buttonIsPressed())
 		Led2_TurnOn();
-	} else {
+	else
 		Led2_TurnOff();
-	}
   }
   /* USER CODE END 3 */
 }

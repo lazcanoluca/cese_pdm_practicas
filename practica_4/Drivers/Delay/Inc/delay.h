@@ -30,19 +30,12 @@ typedef struct {
  */
 void delayInit(delay_t *delay, tick_t duration);
 
-// void delaySet(delay_t *delay, tick_t duration);
-
 /**
  * @brief Resets a delay so that the new "starting time" is now,
  * and runs it if it isn't already.
  * @param delay Pointer to the delay structure.
  */
 void delayReset(delay_t *delay);
-
-// void delayStart(delay_t *delay);
-// bool delayExpired(delay_t *delay);
-// void delayRemaining(delay_t *delay);
-
 
 /**
  * @brief Starts the delay.

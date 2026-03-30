@@ -75,7 +75,6 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-void Led2_TurnOn();
 
 /* USER CODE END Private defines */
 
