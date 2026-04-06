@@ -33,6 +33,8 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+void MX_USART2_UART_Init(void);
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
